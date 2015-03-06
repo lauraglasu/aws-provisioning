@@ -1,5 +1,5 @@
 ---
 InstanceType: "t2.micro"
-AmiId: "ami-4ac6653d"
+AmiId: "ami-526f8725"
 SSHLocation: "217.113.163.0/27"
 KeyName: "ec2_test"
