@@ -7,12 +7,7 @@
     "Instance" : {
       "Description" : "Type of EC2 instance to launch",
       "Type" : "String",
-      "Default" : "",
-      "AllowedValues": [
-        "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge",
-        "m3.xlarge", "m3.2xlarge",
-        "c3.2xlarge", "c3.4xlarge", "c3.8xlarge"
-      ]
+      "Default" : ""
     },
     "ImageId" : {
       "Description" : "AMI Id corresponding to the region in which the instance is getting deployed into",
