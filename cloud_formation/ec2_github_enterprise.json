@@ -1,0 +1,169 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "GitHub Enterprise trial configuration",
+
+  "Parameters" : {
+    "Instance" : {
+      "Description" : "Type of EC2 instance to launch",
+      "Type" : "String",
+      "Default" : ""
+      "AllowedValues": [
+        "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge",
+        "m3.xlarge", "m3.2xlarge",
+        "c3.2xlarge", "c3.4xlarge", "c3.8xlarge"
+      ]
+    },
+    "ImageId" : {
+      "Description" : "AMI Id corresponding to the region in which the instance is getting deployed into",
+      "Type" : "String",
+      "Default" : ""
+    },
+    "Data" : {
+      "Description" : "Size of attached EBS volumes (in GB)",
+      "Type" : "Number",
+      "Default" : ""
+      "MinValue" : 10,
+      "MaxValue" : 1000
+    },
+    "EbsOptimized" : {
+      "Description" : "Specifies whether the instance is optimized for Amazon Elastic Block Store I/O",
+      "Type" : "String",
+      "Default" : ""
+    },
+    "KeyName" : {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type" : "String",
+      "Default" : ""
+    },
+    "SSHLocation" : {
+      "Description" : "The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "SubnetId" : {
+      "Description" : "The id for the existing subnet in which the instance is to be deployed in.",
+      "Type" : "String",
+      "Default" : ""
+    }
+  },
+
+    
+  "Resources" : {
+    "GHSolo" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "SecurityGroups" : [ { "Ref" : "GHInstanceSecurityGroup" } ],
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Ref" : "ImageId" },
+        "InstanceType" : { "Ref" : "Instance" },
+        "SubnetId" : { "Ref" : "SubnetId"},
+        "EbsOptimized": { "Ref" : "EbsOptimized" },
+        "BlockDeviceMappings": [{
+          "DeviceName" : "/dev/xvdf",
+          "Ebs": {
+            "VolumeType": "gp2",
+            "VolumeSize" : { "Ref" : "Data" },
+            "Encrypted": false,
+            "DeleteOnTermination": false
+          }
+        }]
+      }
+    },
+
+    "GHInstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH access and HTTP access on the inbound port",
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 80,
+          "ToPort" : 80,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 443,
+          "ToPort" : 443,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 8443,
+          "ToPort" : 8443,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 25,
+          "ToPort" : 25,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 465,
+          "ToPort" : 465,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 587,
+          "ToPort" : 587,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 1194,
+          "ToPort" : 1194,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "udp",
+          "FromPort" : 1194,
+          "ToPort" : 1194,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 122,
+          "ToPort" : 122,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : 9418,
+          "ToPort" : 9418,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "udp",
+          "FromPort" : 123,
+          "ToPort" : 123,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },
+        {
+          "IpProtocol" : "udp",
+          "FromPort" : 161,
+          "ToPort" : 161,
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+
+  "Outputs" : {
+    "SoloURL" : {
+      "Description" : "URL of the primary instance",
+      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "GHSolo", "PublicIp" ]}]]}
+    }
+  }
+}
