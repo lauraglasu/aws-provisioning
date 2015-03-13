@@ -70,7 +70,11 @@
             "Encrypted": false,
             "DeleteOnTermination": false
           }
-        }]
+        }],
+        "Tags" : [ {
+         "Key" : "Name",
+         "Value" : "GitHubEnterprise"
+        } ]
       }
     },
 
