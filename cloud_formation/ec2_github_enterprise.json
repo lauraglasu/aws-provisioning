@@ -42,7 +42,6 @@
     "GHSolo" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
-        "SecurityGroups" : [ { "Ref" : "GHInstanceSecurityGroup" } ],
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "ImageId" },
         "InstanceType" : { "Ref" : "Instance" },
