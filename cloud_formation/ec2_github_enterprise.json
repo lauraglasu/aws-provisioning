@@ -7,7 +7,7 @@
     "Instance" : {
       "Description" : "Type of EC2 instance to launch",
       "Type" : "String",
-      "Default" : ""
+      "Default" : "",
       "AllowedValues": [
         "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge",
         "m3.xlarge", "m3.2xlarge",
@@ -22,7 +22,7 @@
     "Data" : {
       "Description" : "Size of attached EBS volumes (in GB)",
       "Type" : "Number",
-      "Default" : ""
+      "Default" : "",
       "MinValue" : 10,
       "MaxValue" : 1000
     },
