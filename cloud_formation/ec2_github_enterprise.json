@@ -38,8 +38,8 @@
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
     },
-    "SubnetId" : {
-      "Description" : "The id for the existing subnet in which the instance is to be deployed in.",
+    "VpcId" : {
+      "Description" : "The id of the existing VPC in which to create the resources",
       "Type" : "String",
       "Default" : ""
     }
@@ -54,7 +54,6 @@
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "ImageId" },
         "InstanceType" : { "Ref" : "Instance" },
-        "SubnetId" : { "Ref" : "SubnetId"},
         "EbsOptimized": { "Ref" : "EbsOptimized" },
         "BlockDeviceMappings": [{
           "DeviceName" : "/dev/xvdf",
@@ -77,6 +76,7 @@
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
         "GroupDescription" : "Enable SSH access and HTTP access on the inbound port",
+        "VpcId": { "Ref": "VpcId" },
         "SecurityGroupIngress" : [ {
           "IpProtocol" : "tcp",
           "FromPort" : "22",
