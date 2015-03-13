@@ -17,7 +17,6 @@
     "Data" : {
       "Description" : "Size of attached EBS volumes (in GB)",
       "Type" : "Number",
-      "Default" : "",
       "MinValue" : 10,
       "MaxValue" : 1000
     },
