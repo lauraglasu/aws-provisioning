@@ -62,12 +62,5 @@
         } ]
       }
     }
-  },
-
-  "Outputs" : {
-    "SoloURL" : {
-      "Description" : "URL of the primary instance",
-      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "GHSolo", "PublicIp" ]}]]}
-    }
   }
 }
