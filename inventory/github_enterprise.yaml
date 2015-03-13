@@ -1,7 +1,7 @@
 ---
 Instance: "m3.xlarge" 
 ImageId: "ami-3b54c44c"
-Data: "10"
+Data: 10
 EbsOptimized: "false"
 KeyName: "github.enterprise"
 SSHLocation: "217.113.163.0/27"
